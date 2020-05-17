@@ -10,12 +10,14 @@ import NewQuestion from "./components/NewQuestion";
 import Quiz from "./components/Quiz";
 import QuizResult from "./components/QuizResult";
 import HomeScreen from "./components/HomeScreen";
+import API_TEST from "./components/API_TEST";
 
 const Stack = createStackNavigator();
 
 export default class App extends Component {
   render() {
     return (
+      // <API_TEST />
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
