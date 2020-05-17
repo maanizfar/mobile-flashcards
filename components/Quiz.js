@@ -3,24 +3,29 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 class Quiz extends Component {
   state = {
-    question: {
+    show: "answer",
+    quiz: {
       question: "What is React?",
       answer: "A library for managing user interfaces",
     },
   };
 
   render() {
-    const { question } = this.state;
+    const { show, quiz } = this.state;
 
     return (
       <View style={[styles.container, { marginTop: 24 }]}>
         <Text>2/2</Text>
-        <Text style={styles.questionText}>{question.question}</Text>
+        <Text style={styles.questionText}>
+          {show === "question" ? quiz.question : quiz.answer}
+        </Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => console.log("pressed!")}
+          onPress={() =>
+            this.setState({ show: show === "question" ? "answer" : "question" })
+          }
         >
-          <Text>Show Answer</Text>
+          <Text>{show === "question" ? "Show Answer" : "Show Question"}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
