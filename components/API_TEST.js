@@ -1,11 +1,14 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { getDecks, addDeck, addCard } from "../utils/api";
+import { getDecks, addDeck, addCard, getDeck } from "../utils/api";
 
 class API_TEST extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <TouchableOpacity style={styles.btn} onPress={() => getDeck("Music")}>
+          <Text>Get Deck with title Music</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={() => getDecks()}>
           <Text>Get Decks</Text>
         </TouchableOpacity>

@@ -1,4 +1,10 @@
-import { _getDecks, _addDeck, _addCardToDeck } from "./_DATA";
+import { _getDeck, _getDecks, _addDeck, _addCardToDeck } from "./_DATA";
+
+export function getDeck(title) {
+  return _getDeck(title)
+    .then((deck) => console.log(deck))
+    .catch((err) => alert(err));
+}
 
 export function getDecks() {
   return _getDecks().then((decks) => console.log(decks));

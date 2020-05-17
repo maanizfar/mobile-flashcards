@@ -30,6 +30,14 @@ export function _getDecks() {
   });
 }
 
+export function _getDeck(id) {
+  const deck = Object.values(decks).filter((d) => d.title === id);
+  return new Promise((res, rej) => {
+    if (deck.length === 0) rej("Deck with id " + id + " not found.");
+    else setTimeout(() => res(deck), 500);
+  });
+}
+
 export function _addDeck(title) {
   return new Promise((res, rej) => {
     if (Object.keys(decks).includes(title)) {
