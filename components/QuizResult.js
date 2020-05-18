@@ -2,9 +2,15 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import TextButton from "./TextButton";
 import { lightBlue, darkBlue } from "../utils/colors";
+import {
+  setLocalNotification,
+  clearLocalNotification,
+} from "../utils/notifications";
 
 class QuizResult extends Component {
-  state = {};
+  componentDidMount() {
+    clearLocalNotification().then(setLocalNotification);
+  }
 
   render() {
     const { navigation } = this.props;
