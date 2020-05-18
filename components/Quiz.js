@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import {
-  setLocalNotification,
-  clearLocalNotification,
-} from "../utils/notifications";
+
 import TextButton from "./TextButton";
 import { lightBlue, darkBlue, white, red, green } from "../utils/colors";
 
@@ -16,13 +13,10 @@ class Quiz extends Component {
     incorrectAnswers: 0,
   };
 
-  componentDidMount() {
-    clearLocalNotification().then(setLocalNotification);
-  }
-
   handleAnswer = (ans) => {
     this.setState(
       {
+        show: "question",
         [ans]: this.state[ans] + 1,
       },
       () => {
