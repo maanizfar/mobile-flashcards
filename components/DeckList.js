@@ -1,87 +1,27 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
+import { connect } from "react-redux";
 
 import DeckListItem from "./DeckListItem";
+import { handleInitialData } from "../actions/index";
 
 class DeckList extends Component {
-  state = {
-    decks: [
-      {
-        title: "React",
-        questions: [
-          {
-            question: "What is React?",
-            answer: "A library for managing user interfaces",
-          },
-          {
-            question: "Where do you make Ajax requests in React?",
-            answer: "The componentDidMount lifecycle event",
-          },
-        ],
-      },
-      {
-        title: "JavaScript",
-        questions: [
-          {
-            question: "What is a closure?",
-            answer:
-              "The combination of a function and the lexical environment within which that function was declared.",
-          },
-        ],
-      },
-      {
-        title: "hsld",
-        questions: [
-          {
-            question: "What is a closure?",
-            answer:
-              "The combination of a function and the lexical environment within which that function was declared.",
-          },
-        ],
-      },
-      {
-        title: "Reacsdfsdft",
-        questions: [
-          {
-            question: "What is React?",
-            answer: "A library for managing user interfaces",
-          },
-          {
-            question: "Where do you make Ajax requests in React?",
-            answer: "The componentDidMount lifecycle event",
-          },
-        ],
-      },
-      {
-        title: "JavaSsdfsfcript",
-        questions: [
-          {
-            question: "What is a closure?",
-            answer:
-              "The combination of a function and the lexical environment within which that function was declared.",
-          },
-        ],
-      },
-      {
-        title: "hslsdfsdd",
-        questions: [
-          {
-            question: "What is a closure?",
-            answer:
-              "The combination of a function and the lexical environment within which that function was declared.",
-          },
-        ],
-      },
-    ],
-  };
+  componentDidMount() {
+    this.props.handleInitialData();
+  }
+
   render() {
-    const { decks } = this.state;
+    const { decks } = this.props;
     return (
       <View style={[styles.container, { marginTop: 24 }]}>
         <FlatList
-          data={decks}
+          data={Object.values(decks)}
           renderItem={(deck) => (
-            <DeckListItem navigation={this.props.navigation} />
+            <DeckListItem
+              title={deck.item.title}
+              cardsCount={deck.item.questions.length}
+              navigation={this.props.navigation}
+            />
           )}
           keyExtractor={(deck) => deck.title}
         />
@@ -97,4 +37,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeckList;
+const mapStateToProps = (state) => {
+  return { decks: state };
+};
+
+export default connect(mapStateToProps, { handleInitialData })(DeckList);

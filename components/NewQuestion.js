@@ -6,28 +6,49 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { connect } from "react-redux";
+import { addCardToDeck } from "../actions/index";
+import TextButton from "./TextButton";
 
 class NewQuestion extends Component {
+  state = {
+    question: "",
+    answer: "",
+  };
+
+  handleSubmit = () => {
+    const { question, answer } = this.state;
+    if (question === "" || answer === "") {
+      alert("Invalid input.");
+      return;
+    }
+
+    const { dispatch, route, navigation } = this.props;
+    const deckId = route.params.deckId;
+
+    dispatch(addCardToDeck(deckId, { question, answer }));
+    navigation.navigate("DeckDetail", { deckTitle: deckId });
+  };
+
   render() {
+    const { question, answer } = this.state;
+
     return (
       <View style={[styles.container, { marginTop: 24 }]}>
-        <Text style={styles.text}>Add a question</Text>
+        <Text style={styles.headerText}>Add a card</Text>
         <TextInput
           style={styles.input}
           placeholder={" Question"}
-          onChangeText={(text) => console.log("")}
+          value={question}
+          onChangeText={(text) => this.setState({ question: text })}
         />
         <TextInput
           style={styles.input}
           placeholder={" Answer"}
-          onChangeText={(text) => console.log("")}
+          value={answer}
+          onChangeText={(text) => this.setState({ answer: text })}
         />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => console.log("pressed!")}
-        >
-          <Text>Submit</Text>
-        </TouchableOpacity>
+        <TextButton text="Submit" onPress={this.handleSubmit} />
       </View>
     );
   }
@@ -40,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexBasis: 300,
   },
-  text: {
+  headerText: {
     fontSize: 32,
     textAlign: "center",
   },
@@ -53,13 +74,6 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12,
   },
-  button: {
-    marginTop: 24,
-    alignItems: "center",
-    alignSelf: "stretch",
-    padding: 10,
-    backgroundColor: "#DDDDDD",
-  },
 });
 
-export default NewQuestion;
+export default connect()(NewQuestion);

@@ -1,27 +1,67 @@
-import { _getDeck, _getDecks, _addDeck, _addCardToDeck } from "./_DATA";
+import { _decks, DECKS_STORAGE_KEY } from "./_DATA";
+import { AsyncStorage } from "react-native";
 
-export function getDeck(title) {
-  return _getDeck(title)
-    .then((deck) => console.log(deck))
-    .catch((err) => alert(err));
+export async function getDeck(title) {
+  try {
+    const decks = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
+    return JSON.parse(decks)[title];
+  } catch (error) {
+    alert(error);
+  }
 }
 
-export function getDecks() {
-  return _getDecks().then((decks) => console.log(decks));
+export async function getDecks() {
+  try {
+    const decks = await AsyncStorage.getItem(DECKS_STORAGE_KEY);
+
+    if (decks === null) {
+      await AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(_decks));
+    }
+
+    return decks === null ? _decks : JSON.parse(decks);
+  } catch (error) {
+    alert(error);
+  }
 }
 
-export function addDeck(title) {
-  return (
-    _addDeck(title)
-      // .then((decks) => console.log(decks))
-      .catch((err) => alert(err))
-  );
+export async function addDeck(title) {
+  try {
+    await AsyncStorage.mergeItem(
+      DECKS_STORAGE_KEY,
+      JSON.stringify({
+        [title]: {
+          title,
+          questions: [],
+        },
+      })
+    );
+  } catch (error) {
+    alert(error);
+  }
 }
 
-export function addCard(deckTitle, question, answer) {
-  return (
-    _addCardToDeck(deckTitle, { question, answer })
-      // .then((decks) => console.log(decks))
-      .catch((err) => alert(err))
-  );
+export async function addCard(deckTitle, card) {
+  try {
+    const deck = await getDeck(deckTitle);
+
+    await AsyncStorage.mergeItem(
+      DECKS_STORAGE_KEY,
+      JSON.stringify({
+        [deckTitle]: {
+          questions: deck.questions.concat(card),
+        },
+      })
+    );
+  } catch (error) {
+    console.log(error);
+    alert(error);
+  }
+}
+
+export async function resetData() {
+  try {
+    await AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(_decks));
+  } catch (error) {
+    alert(error);
+  }
 }

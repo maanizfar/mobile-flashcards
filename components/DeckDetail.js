@@ -1,37 +1,28 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
+import TextButton from "./TextButton";
 
 class DeckDetail extends Component {
   state = {};
 
   render() {
-    const { value } = this.state;
-    const { navigation } = this.props;
+    const { deck, navigation } = this.props;
 
     return (
       <View style={[styles.container, { marginTop: 24 }]}>
         <View style={styles.titleContainer}>
-          <Text style={styles.name}>Deck 1</Text>
-          <Text style={styles.cards}>3 Cards</Text>
+          <Text style={styles.deckName}>{deck.title}</Text>
+          <Text style={styles.cardsText}>{deck.questions.length} Cards</Text>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("AddCard")}
-        >
-          <Text>Add Card</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Quiz")}
-        >
-          <Text>Start Quiz</Text>
-        </TouchableOpacity>
+        <TextButton
+          text="Add Card"
+          onPress={() => navigation.navigate("AddCard", { deckId: deck.title })}
+        />
+        <TextButton
+          text="Start Quiz"
+          onPress={() => navigation.navigate("Quiz", { deckId: deck.title })}
+        />
       </View>
     );
   }
@@ -42,7 +33,6 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
     margin: 24,
   },
   titleContainer: {
@@ -51,34 +41,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "stretch",
-    borderWidth: 1,
-    flexBasis: 140,
   },
-  name: {
-    fontSize: 28,
+  deckName: {
+    fontSize: 32,
   },
-  cards: {
+  cardsText: {
     fontSize: 18,
     color: "gray",
   },
-  text: {
-    fontSize: 32,
-    textAlign: "center",
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    alignSelf: "stretch",
-    marginTop: 24,
-  },
-  button: {
-    marginTop: 24,
-    alignItems: "center",
-    alignSelf: "stretch",
-    padding: 10,
-    backgroundColor: "#DDDDDD",
-  },
 });
 
-export default DeckDetail;
+const mapStateToProps = (state, { route }) => {
+  const { deckTitle } = route.params;
+  const deck = state[deckTitle];
+
+  return {
+    deck,
+  };
+};
+
+export default connect(mapStateToProps)(DeckDetail);
