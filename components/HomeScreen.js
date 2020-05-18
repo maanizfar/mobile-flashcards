@@ -30,7 +30,11 @@ export default function HomeScreen() {
       }}
     >
       <Tab.Screen name="Decks" component={DeckList} />
-      <Tab.Screen name="AddDeck" component={NewDeck} />
+      <Tab.Screen
+        name="AddDeck"
+        component={NewDeck}
+        options={{ title: "Add Deck" }}
+      />
     </Tab.Navigator>
   );
 }
